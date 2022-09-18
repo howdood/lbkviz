@@ -52,8 +52,8 @@ html, body { width:100%; height:100%; } /* just to be sure these are full screen
     animation: fadeInOut 12s linear 0s infinite;
 }
 .spinning {
-    width: 50vw;
-    height: auto;
+    height: 67vh;
+    width: auto;
     animation: rotateAnimationInfinite 4s linear 0s infinite;
     transform-origin: 50% 0 0;
 }
