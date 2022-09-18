@@ -115,20 +115,20 @@ function restartCycleInterval() {
   }
 }
 
-$("#micSelect").click(() => {
-  $("#audioSelectWrapper").css("display", "none");
+//$("#micSelect").click(() => {
+//  $("#audioSelectWrapper").css("display", "none");
 
-  navigator.getUserMedia(
-    { audio: true },
-    (stream) => {
-      var micSourceNode = audioContext.createMediaStreamSource(stream);
-      connectMicAudio(micSourceNode, audioContext);
-    },
-    (err) => {
-      console.log("Error getting audio stream from getUserMedia");
-    }
-  );
-});
+//  navigator.getUserMedia(
+ //   { audio: true },
+ //   (stream) => {
+  //    var micSourceNode = audioContext.createMediaStreamSource(stream);
+   //   connectMicAudio(micSourceNode, audioContext);
+  //  },
+ //   (err) => {
+ //     console.log("Error getting audio stream from getUserMedia");
+ //   }
+ // );
+//});
 
 function initPlayer() {
   audioContext = new AudioContext();
