@@ -51,4 +51,4 @@ xset s off
 xset s noblank
 
 unclutter &
-chromium-browser localhost --window-position=0,0 --window-size=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f 1),$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f 2) --start-fullscreen --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disk-cache-dir=/dev/null  --password-store=basic
+chromium-browser localhost --window-position=0,0 --window-size=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f 1),$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f 2) --start-fullscreen --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast-start --disable-infobars --use-fake-ui-for-media-stream --enable-media-stream --no-sandbox --user-data-dir=/tmp/chromium --gpu-no-context-lost --enable-gpu-rasterization --disk-cache-dir=/dev/null  --password-store=basic
