@@ -46,9 +46,38 @@ Launch at startup
 To start them automatically at startup, we create a file~/.xinitrc (this file is executed when the X server starts) which contains the following commands (take care to choose your URL):
 ````
 #!/bin/sh
+# Disable power management and screensaver
 xset -dpms
 xset s off
 xset s noblank
 
-unclutter &
-chromium-browser http://localhost --window-position=0,0 --window-size=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f 1),$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f 2) --start-fullscreen --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast-start --disable-infobars --use-fake-ui-for-media-stream --enable-media-stream --no-sandbox --user-data-dir=/tmp/chromium --gpu-no-context-lost --enable-gpu-rasterization --disk-cache-dir=/dev/null --password-store=basic  --unsafely-treat-insecure-origin-as-secure=http://localhost,http://lbkmac.local --enable-audio-service-sandbox --disable-features=AudioServiceOutOfProcess
+# Allow SSH sessions to use the X server
+export DISPLAY=:0
+xhost +SI:localuser:$USER
+
+# Ensure WebGL works by enabling GPU acceleration
+chromium-browser localhost \
+  --window-position=0,0 \
+  --window-size=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f 1),$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f 2) \
+  --start-fullscreen \
+  --kiosk \
+  --incognito \
+  --noerrdialogs \
+  --disable-translate \
+  --no-first-run \
+  --fast-start \
+  --disable-infobars \
+  --use-fake-ui-for-media-stream \
+  --enable-media-stream \
+  --no-sandbox \
+  --user-data-dir=/tmp/chromium \
+  --gpu-no-context-lost \
+  --enable-gpu-rasterization \
+  --disk-cache-dir=/dev/null \
+  --password-store=basic \
+  --unsafely-treat-insecure-origin-as-secure=http://localhost \
+  --enable-webgl \
+  --ignore-gpu-blocklist \
+  --use-gl=egl \
+  --enable-features=VaapiVideoDecoder,VaapiVideoEncoder \
+  --disable-software-rasterizer
