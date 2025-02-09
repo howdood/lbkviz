@@ -6,7 +6,7 @@ nb you also need nginx set up to serve the website on localhost - or you could j
 
 Terminal commands to set up chromium kiosk on server:
 `````
-sudo apt-get install xserver-xorg-video-all xserver-xorg-input-all xserver-xorg-core xinit x11-xserver-utils
+sudo apt-get install xserver-xorg-video-all xserver-xorg-input-all xserver-xorg-core xinit x11-xserver-utils alsamixer pavucontrol
 ``````
 =======
 To start the server automatically at startup, edit the ~/.bash_profile file, which is executed when the user logs in, to put the following content (the server starts with startx, but it is also necessary to check that a screen is available to avoid an error, for example, with SSH):
@@ -50,34 +50,27 @@ To start them automatically at startup, we create a file~/.xinitrc (this file is
 xset -dpms
 xset s off
 xset s noblank
+# nb you can add the flag --use-fake-device-for-media-stream if audio not present
+unclutter &
+# Start a browser with necessary flags
+chromium-browser --no-sandbox \
+--use-fake-ui-for-media-stream \
+--autoplay-policy=no-user-gesture-required \
+--window-size=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f 1),$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f 2) \
+--start-fullscreen \
+--kiosk \
+--incognito \
+--noerrdialogs \
+--disable-translate \
+--no-first-run \
+--fast-start \
+--disable-infobars \
+--hide-scrollbars \
+--disable-extensions \
+--disk-cache-dir=/dev/null \
+--user-data-dir=/tmp/chromium3 \
+--password-store=basic \
+http://localhost
 
-# Allow SSH sessions to use the X server
-export DISPLAY=:0
-xhost +SI:localuser:$USER
-
-# Ensure WebGL works by enabling GPU acceleration
-chromium-browser localhost \
-  --window-position=0,0 \
-  --window-size=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f 1),$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f 2) \
-  --start-fullscreen \
-  --kiosk \
-  --incognito \
-  --noerrdialogs \
-  --disable-translate \
-  --no-first-run \
-  --fast-start \
-  --disable-infobars \
-  --use-fake-ui-for-media-stream \
-  --enable-media-stream \
-  --no-sandbox \
-  --user-data-dir=/tmp/chromium \
-  --gpu-no-context-lost \
-  --enable-gpu-rasterization \
-  --disk-cache-dir=/dev/null \
-  --password-store=basic \
-  --unsafely-treat-insecure-origin-as-secure=http://localhost \
-  --enable-webgl \
-  --ignore-gpu-blocklist \
-  --use-gl=egl \
-  --enable-features=VaapiVideoDecoder,VaapiVideoEncoder \
-  --disable-software-rasterizer
+# You can replace 'chromium' with 'google-chrome' or 'firefox' if needed
+exec xterm  # Keep the session open
